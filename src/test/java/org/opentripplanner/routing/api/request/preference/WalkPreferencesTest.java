@@ -20,6 +20,8 @@ class WalkPreferencesTest {
   private static final double EXPECTED_STAIRS_TIME_FACTOR = 1.31;
   private static final double SAFETY_FACTOR = 0.5111;
   private static final double EXPECTED_SAFETY_FACTOR = 0.51;
+  private static final double TUNNEL_RELUCTANCE = 1.051;
+  private static final double EXPECTED_TUNNEL_RELUCTANCE = 1.05;
 
   private final WalkPreferences subject = WalkPreferences
     .of()
@@ -29,6 +31,7 @@ class WalkPreferencesTest {
     .withStairsReluctance(STAIRS_RELUCTANCE)
     .withStairsTimeFactor(STAIRS_TIME_FACTOR)
     .withSafetyFactor(SAFETY_FACTOR)
+    .withTunnelReluctance(TUNNEL_RELUCTANCE)
     .build();
 
   @Test
@@ -62,6 +65,11 @@ class WalkPreferencesTest {
   }
 
   @Test
+  void tunnelReluctance() {
+    assertEquals(EXPECTED_TUNNEL_RELUCTANCE, subject.tunnelReluctance());
+  }
+
+  @Test
   void testEqualsAndHashCodeWithCopiedPreferences() {
     // Return same object if no value is set
     assertSame(subject, subject.copyOf().build());
@@ -82,6 +90,8 @@ class WalkPreferencesTest {
     var sameSafetyFactor = 0.5;
     var sameEscalatorReluctance = 2.45;
     var sameBoardCost = 60;
+    var sameTunnelRelunctance = 4.52;
+
     var firstEqual = WalkPreferences
       .of()
       .withSpeed(sameSpeed)
@@ -90,6 +100,7 @@ class WalkPreferencesTest {
       .withSafetyFactor(sameSafetyFactor)
       .withEscalatorReluctance(sameEscalatorReluctance)
       .withBoardCost(sameBoardCost)
+      .withTunnelReluctance(sameTunnelRelunctance)
       .build();
     var secondEqual = WalkPreferences
       .of()
@@ -99,6 +110,7 @@ class WalkPreferencesTest {
       .withSafetyFactor(sameSafetyFactor)
       .withEscalatorReluctance(sameEscalatorReluctance)
       .withBoardCost(sameBoardCost)
+      .withTunnelReluctance(sameTunnelRelunctance)
       .build();
     assertEqualsAndHashCode(firstEqual, secondEqual);
 
@@ -112,6 +124,7 @@ class WalkPreferencesTest {
       .withSafetyFactor(sameSafetyFactor)
       .withEscalatorReluctance(sameEscalatorReluctance)
       .withBoardCost(sameBoardCost)
+      .withTunnelReluctance(sameTunnelRelunctance)
       .build();
     assertNotEqualsAndHashCode(firstEqual, differentSpeedPreferences);
 
@@ -125,6 +138,7 @@ class WalkPreferencesTest {
       .withSafetyFactor(sameSafetyFactor)
       .withEscalatorReluctance(sameEscalatorReluctance)
       .withBoardCost(sameBoardCost)
+      .withTunnelReluctance(sameTunnelRelunctance)
       .build();
     assertNotEqualsAndHashCode(firstEqual, differentReluctancePreferences);
 
@@ -138,6 +152,7 @@ class WalkPreferencesTest {
       .withSafetyFactor(sameSafetyFactor)
       .withEscalatorReluctance(sameEscalatorReluctance)
       .withBoardCost(sameBoardCost)
+      .withTunnelReluctance(sameTunnelRelunctance)
       .build();
     assertNotEqualsAndHashCode(firstEqual, differentStairsReluctancePreferences);
 
@@ -151,6 +166,7 @@ class WalkPreferencesTest {
       .withSafetyFactor(notSameSafetyFactor)
       .withEscalatorReluctance(sameEscalatorReluctance)
       .withBoardCost(sameBoardCost)
+      .withTunnelReluctance(sameTunnelRelunctance)
       .build();
     assertNotEqualsAndHashCode(firstEqual, differentSafetyFactorPreferences);
 
@@ -164,6 +180,7 @@ class WalkPreferencesTest {
       .withSafetyFactor(sameSafetyFactor)
       .withEscalatorReluctance(notSameEscalatorReluctance)
       .withBoardCost(sameBoardCost)
+      .withTunnelReluctance(sameTunnelRelunctance)
       .build();
     assertNotEqualsAndHashCode(firstEqual, differentEscalatorReluctancePreferences);
 
@@ -177,15 +194,30 @@ class WalkPreferencesTest {
       .withSafetyFactor(sameSafetyFactor)
       .withEscalatorReluctance(sameEscalatorReluctance)
       .withBoardCost(notSameBoardCost)
+      .withTunnelReluctance(sameTunnelRelunctance)
       .build();
     assertNotEqualsAndHashCode(firstEqual, differentBoardCostPreferences);
+
+    // Test that changing board cost means preferences are not equal
+    var notSameTunnelReluctance = +1;
+    var differentTunnelReluctancePreferences = WalkPreferences
+      .of()
+      .withSpeed(sameSpeed)
+      .withReluctance(sameReluctance)
+      .withStairsReluctance(sameStairsReluctance)
+      .withSafetyFactor(sameSafetyFactor)
+      .withEscalatorReluctance(sameEscalatorReluctance)
+      .withBoardCost(notSameTunnelReluctance)
+      .withTunnelReluctance(sameTunnelRelunctance)
+      .build();
+    assertNotEqualsAndHashCode(firstEqual, differentTunnelReluctancePreferences);
   }
 
   @Test
   void testToString() {
     assertEquals("WalkPreferences{}", WalkPreferences.DEFAULT.toString());
     assertEquals(
-      "WalkPreferences{speed: 1.71, reluctance: 2.5, boardCost: $301, stairsReluctance: 3.0, stairsTimeFactor: 1.31, safetyFactor: 0.51}",
+      "WalkPreferences{speed: 1.71, reluctance: 2.5, boardCost: $301, stairsReluctance: 3.0, stairsTimeFactor: 1.31, safetyFactor: 0.51, tunnelReluctance: 1.05}",
       subject.toString()
     );
   }
