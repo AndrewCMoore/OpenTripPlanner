@@ -1,5 +1,6 @@
 package org.opentripplanner.routing.api.request.preference;
 
+import static org.opentripplanner.framework.lang.DoubleUtils.doubleEquals;
 import static org.opentripplanner.routing.api.request.preference.AccessibilityPreferences.ofCost;
 
 import java.io.Serializable;
@@ -30,6 +31,8 @@ public class WheelchairPreferences implements Serializable {
 
   private static final int DEFAULT_STAIRS_RELUCTANCE = 100;
 
+  private static final double DEFAULT_TUNNEL_RELUCTANCE = 1.0;
+
   /**
    * It's very common for elevators in OSM to have unknown wheelchair accessibility since they are
    * assumed to be so for that reason they only have a small default penalty for unknown
@@ -46,7 +49,8 @@ public class WheelchairPreferences implements Serializable {
     DEFAULT_INACCESSIBLE_STREET_RELUCTANCE,
     DEFAULT_MAX_SLOPE,
     DEFAULT_SLOPE_EXCEEDED_RELUCTANCE,
-    DEFAULT_STAIRS_RELUCTANCE
+    DEFAULT_STAIRS_RELUCTANCE,
+    DEFAULT_TUNNEL_RELUCTANCE
   );
 
   private AccessibilityPreferences trip;
@@ -56,6 +60,7 @@ public class WheelchairPreferences implements Serializable {
   private double maxSlope;
   private double slopeExceededReluctance;
   private double stairsReluctance;
+  private double tunnelReluctance;
 
   private WheelchairPreferences(
     AccessibilityPreferences trip,
@@ -64,7 +69,8 @@ public class WheelchairPreferences implements Serializable {
     double inaccessibleStreetReluctance,
     double maxSlope,
     double slopeExceededReluctance,
-    double stairsReluctance
+    double stairsReluctance,
+    double tunnelReluctance
   ) {
     this.trip = Objects.requireNonNull(trip);
     this.stop = Objects.requireNonNull(stop);
@@ -73,6 +79,7 @@ public class WheelchairPreferences implements Serializable {
     this.maxSlope = Units.ratio(maxSlope);
     this.slopeExceededReluctance = Units.reluctance(slopeExceededReluctance);
     this.stairsReluctance = Units.reluctance(stairsReluctance);
+    this.tunnelReluctance = Units.reluctance(tunnelReluctance);
   }
 
   private WheelchairPreferences(Builder builder) {
@@ -83,6 +90,7 @@ public class WheelchairPreferences implements Serializable {
     this.maxSlope = Units.ratio(builder.maxSlope);
     this.slopeExceededReluctance = Units.reluctance(builder.slopeExceededReluctance);
     this.stairsReluctance = Units.reluctance(builder.stairsReluctance);
+    this.tunnelReluctance = Units.reluctance(builder.tunnelReluctance);
   }
 
   public static Builder of() {
@@ -121,6 +129,10 @@ public class WheelchairPreferences implements Serializable {
     return stairsReluctance;
   }
 
+  public double tunnelReluctance() {
+    return tunnelReluctance;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -131,6 +143,7 @@ public class WheelchairPreferences implements Serializable {
       Double.compare(that.maxSlope, maxSlope) == 0 &&
       Double.compare(that.slopeExceededReluctance, slopeExceededReluctance) == 0 &&
       Double.compare(that.stairsReluctance, stairsReluctance) == 0 &&
+      doubleEquals(that.tunnelReluctance, tunnelReluctance) &&
       trip.equals(that.trip) &&
       stop.equals(that.stop) &&
       elevator.equals(that.elevator)
@@ -146,7 +159,8 @@ public class WheelchairPreferences implements Serializable {
       inaccessibleStreetReluctance,
       maxSlope,
       slopeExceededReluctance,
-      stairsReluctance
+      stairsReluctance,
+      tunnelReluctance
     );
   }
 
@@ -165,6 +179,7 @@ public class WheelchairPreferences implements Serializable {
       .addNum("maxSlope", maxSlope, DEFAULT.maxSlope)
       .addNum("slopeExceededReluctance", slopeExceededReluctance, DEFAULT.slopeExceededReluctance)
       .addNum("stairsReluctance", stairsReluctance, DEFAULT.stairsReluctance)
+      .addNum("tunnelReluctance", tunnelReluctance, DEFAULT.tunnelReluctance)
       .toString();
   }
 
@@ -178,6 +193,7 @@ public class WheelchairPreferences implements Serializable {
     private double maxSlope;
     private double slopeExceededReluctance;
     private double stairsReluctance;
+    private double tunnelReluctance;
 
     private Builder(WheelchairPreferences original) {
       this.original = original;
@@ -188,6 +204,7 @@ public class WheelchairPreferences implements Serializable {
       this.maxSlope = original.maxSlope;
       this.slopeExceededReluctance = original.slopeExceededReluctance;
       this.stairsReluctance = original.stairsReluctance;
+      this.tunnelReluctance = original.tunnelReluctance;
     }
 
     public WheelchairPreferences original() {
@@ -272,6 +289,11 @@ public class WheelchairPreferences implements Serializable {
 
     public Builder withStairsReluctance(double stairsReluctance) {
       this.stairsReluctance = stairsReluctance;
+      return this;
+    }
+
+    public Builder withTunnelReluctance(double tunnelReluctance) {
+      this.tunnelReluctance = tunnelReluctance;
       return this;
     }
 

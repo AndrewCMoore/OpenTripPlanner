@@ -31,12 +31,14 @@ class WheelchairPreferencesTest {
       .withStairsReluctance(raw)
       .withMaxSlope(raw)
       .withSlopeExceededReluctance(raw)
+      .withTunnelReluctance(raw)
       .build();
 
     assertEquals(roundedRequest.maxSlope(), rounded3);
     assertEquals(roundedRequest.stairsReluctance(), rounded2);
     assertEquals(roundedRequest.inaccessibleStreetReluctance(), rounded2);
     assertEquals(roundedRequest.slopeExceededReluctance(), rounded2);
+    assertEquals(roundedRequest.tunnelReluctance(), rounded2);
   }
 
   static Stream<Arguments> toStringTestCases = Stream.of(
