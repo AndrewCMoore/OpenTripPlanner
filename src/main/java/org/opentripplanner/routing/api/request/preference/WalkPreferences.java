@@ -111,6 +111,11 @@ public final class WalkPreferences implements Serializable {
     return safetyFactor;
   }
 
+  /**
+   * A multiplier for walking through tunneled areas in routing. The higher the
+   * value, the strong the aversion is to going through tunnels. By default, this
+   * value is 1.0, having no effect on routing.
+   */
   public double tunnelReluctance() {
     return tunnelReluctance;
   }
