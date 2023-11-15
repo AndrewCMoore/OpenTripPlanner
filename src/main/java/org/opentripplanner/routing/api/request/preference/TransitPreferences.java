@@ -1,12 +1,14 @@
 package org.opentripplanner.routing.api.request.preference;
 
 import static java.util.Objects.requireNonNull;
+import static org.opentripplanner.framework.lang.DoubleUtils.doubleEquals;
 
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import org.opentripplanner.framework.model.Cost;
+import org.opentripplanner.framework.model.Units;
 import org.opentripplanner.framework.tostring.ToStringBuilder;
 import org.opentripplanner.routing.api.request.framework.CostLinearFunction;
 import org.opentripplanner.routing.api.request.framework.DurationForEnum;
@@ -24,6 +26,7 @@ public final class TransitPreferences implements Serializable {
   private final DurationForEnum<TransitMode> boardSlack;
   private final DurationForEnum<TransitMode> alightSlack;
   private final Map<TransitMode, Double> reluctanceForMode;
+  private final double tunnelReluctance;
   private final Cost otherThanPreferredRoutesPenalty;
   private final CostLinearFunction unpreferredCost;
   private final CostLinearFunction relaxTransitGroupPriority;
@@ -35,6 +38,7 @@ public final class TransitPreferences implements Serializable {
   private TransitPreferences() {
     this.boardSlack = this.alightSlack = DurationForEnum.of(TransitMode.class).build();
     this.reluctanceForMode = Map.of();
+    this.tunnelReluctance = 1.0;
     this.otherThanPreferredRoutesPenalty = Cost.costOfMinutes(5);
     this.unpreferredCost = CostLinearFunction.NORMAL;
     this.relaxTransitGroupPriority = CostLinearFunction.NORMAL;
@@ -48,6 +52,7 @@ public final class TransitPreferences implements Serializable {
     this.boardSlack = requireNonNull(builder.boardSlack);
     this.alightSlack = requireNonNull(builder.alightSlack);
     this.reluctanceForMode = Map.copyOf(requireNonNull(builder.reluctanceForMode));
+    this.tunnelReluctance = Units.reluctance(builder.tunnelReluctance);
     this.otherThanPreferredRoutesPenalty = builder.otherThanPreferredRoutesPenalty;
     this.unpreferredCost = requireNonNull(builder.unpreferredCost);
     this.relaxTransitGroupPriority = Objects.requireNonNull(builder.relaxTransitGroupPriority);
@@ -113,6 +118,15 @@ public final class TransitPreferences implements Serializable {
   }
 
   /**
+   * A multiplier for walking through tunneled areas in routing. The higher the
+   * value, the strong the aversion is to going through tunnels. By default, this
+   * value is 1.0, having no effect on routing.
+   */
+  public double tunnelReluctance() {
+    return tunnelReluctance;
+  }
+
+  /**
    * Penalty added for using every route that is not preferred if user set any route as preferred.
    * We return number of seconds that we are willing to wait for preferred route.
    *
@@ -174,7 +188,7 @@ public final class TransitPreferences implements Serializable {
       boardSlack.equals(that.boardSlack) &&
       alightSlack.equals(that.alightSlack) &&
       reluctanceForMode.equals(that.reluctanceForMode) &&
-      Objects.equals(otherThanPreferredRoutesPenalty, that.otherThanPreferredRoutesPenalty) &&
+      doubleEquals(that.tunnelReluctance, tunnelReluctance) &&
       unpreferredCost.equals(that.unpreferredCost) &&
       Objects.equals(relaxTransitGroupPriority, that.relaxTransitGroupPriority) &&
       ignoreRealtimeUpdates == that.ignoreRealtimeUpdates &&
@@ -190,6 +204,7 @@ public final class TransitPreferences implements Serializable {
       boardSlack,
       alightSlack,
       reluctanceForMode,
+      tunnelReluctance,
       otherThanPreferredRoutesPenalty,
       unpreferredCost,
       relaxTransitGroupPriority,
@@ -207,6 +222,7 @@ public final class TransitPreferences implements Serializable {
       .addObj("boardSlack", boardSlack, DEFAULT.boardSlack)
       .addObj("alightSlack", alightSlack, DEFAULT.alightSlack)
       .addObj("reluctanceForMode", reluctanceForMode, DEFAULT.reluctanceForMode)
+      .addNum("tunnelReluctance", tunnelReluctance, DEFAULT.tunnelReluctance)
       .addObj(
         "otherThanPreferredRoutesPenalty",
         otherThanPreferredRoutesPenalty,
@@ -238,6 +254,7 @@ public final class TransitPreferences implements Serializable {
     private DurationForEnum<TransitMode> boardSlack;
     private DurationForEnum<TransitMode> alightSlack;
     private Map<TransitMode, Double> reluctanceForMode;
+    private double tunnelReluctance;
     private Cost otherThanPreferredRoutesPenalty;
     private CostLinearFunction unpreferredCost;
     private CostLinearFunction relaxTransitGroupPriority;
@@ -251,6 +268,7 @@ public final class TransitPreferences implements Serializable {
       this.boardSlack = original.boardSlack;
       this.alightSlack = original.alightSlack;
       this.reluctanceForMode = original.reluctanceForMode;
+      this.tunnelReluctance = original.tunnelReluctance;
       this.otherThanPreferredRoutesPenalty = original.otherThanPreferredRoutesPenalty;
       this.unpreferredCost = original.unpreferredCost;
       this.relaxTransitGroupPriority = original.relaxTransitGroupPriority;
@@ -284,6 +302,11 @@ public final class TransitPreferences implements Serializable {
 
     public Builder setReluctanceForMode(Map<TransitMode, Double> reluctanceForMode) {
       this.reluctanceForMode = reluctanceForMode;
+      return this;
+    }
+
+    public Builder withTunnelReluctance(double tunnelReluctance) {
+      this.tunnelReluctance = tunnelReluctance;
       return this;
     }
 

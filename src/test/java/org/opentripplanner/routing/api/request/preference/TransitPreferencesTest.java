@@ -21,6 +21,7 @@ class TransitPreferencesTest {
     TransitMode.AIRPLANE,
     2.1
   );
+  private static final double TUNNEL_RELUCTANCE = 1.65;
   private static final CostLinearFunction UNPREFERRED_COST = CostLinearFunction.of("5m + 1.15 x");
   private static final Duration D15s = Duration.ofSeconds(15);
   private static final Duration D45s = Duration.ofSeconds(45);
@@ -38,6 +39,7 @@ class TransitPreferencesTest {
   private final TransitPreferences subject = TransitPreferences
     .of()
     .setReluctanceForMode(RELUCTANCE_FOR_MODE)
+    .withTunnelReluctance(TUNNEL_RELUCTANCE)
     .setOtherThanPreferredRoutesPenalty(OTHER_THAN_PREFERRED_ROUTES_PENALTY)
     .setUnpreferredCost(UNPREFERRED_COST)
     .withBoardSlack(b -> b.withDefault(D45s).with(TransitMode.AIRPLANE, D35m))
@@ -64,6 +66,11 @@ class TransitPreferencesTest {
   @Test
   void reluctanceForMode() {
     assertEquals(RELUCTANCE_FOR_MODE, subject.reluctanceForMode());
+  }
+
+  @Test
+  void tunnelReluctance() {
+    assertEquals(TUNNEL_RELUCTANCE, subject.tunnelReluctance());
   }
 
   @Test
@@ -123,6 +130,7 @@ class TransitPreferencesTest {
       "boardSlack: DurationForTransitMode{default:45s, AIRPLANE:35m}, " +
       "alightSlack: DurationForTransitMode{default:15s, AIRPLANE:25m}, " +
       "reluctanceForMode: {AIRPLANE=2.1}, " +
+      "tunnelReluctance: 1.65, " +
       "otherThanPreferredRoutesPenalty: $350, " +
       "unpreferredCost: 5m + 1.15 t, " +
       "relaxTransitGroupPriority: 5m + 1.50 t, " +
