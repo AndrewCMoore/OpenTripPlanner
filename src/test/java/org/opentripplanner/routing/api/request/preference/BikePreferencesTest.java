@@ -9,10 +9,17 @@ import org.opentripplanner.routing.core.VehicleRoutingOptimizeType;
 
 class BikePreferencesTest {
 
-  public static final double SPEED = 2.0;
-  public static final double RELUCTANCE = 1.2;
-  public static final int BOARD_COST = 660;
-  public static final TimeSlopeSafetyTriangle TRIANGLE = TimeSlopeSafetyTriangle
+  private static final double SPEED = 2.0;
+  private static final double RELUCTANCE = 1.2;
+  private static final double TUNNEL_RELUCTANCE = 1.65;
+  private static final double WALKING_SPEED = 1.15;
+  private static final int BOARD_COST = 660;
+  private static final double WALKING_RELUCTANCE = 1.45;
+  private static final int SWITCH_TIME = 200;
+  private static final int SWITCH_COST = 450;
+  private static final int PARK_TIME = 330;
+  private static final int PARK_COST = 950;
+  private static final TimeSlopeSafetyTriangle TRIANGLE = TimeSlopeSafetyTriangle
     .of()
     .withSlope(1)
     .build();
@@ -25,6 +32,7 @@ class BikePreferencesTest {
     .of()
     .withSpeed(SPEED)
     .withReluctance(RELUCTANCE)
+    .withTunnelReluctance(TUNNEL_RELUCTANCE)
     .withBoardCost(BOARD_COST)
     .withOptimizeType(OPTIMIZE_TYPE)
     .withRental(rental -> rental.withPickupTime(RENTAL_PICKUP_TIME).build())
@@ -40,6 +48,11 @@ class BikePreferencesTest {
   @Test
   void reluctance() {
     assertEquals(RELUCTANCE, subject.reluctance());
+  }
+
+  @Test
+  void tunnelReluctance() {
+    assertEquals(TUNNEL_RELUCTANCE, subject.tunnnelReluctance());
   }
 
   @Test
@@ -91,6 +104,7 @@ class BikePreferencesTest {
       "BikePreferences{" +
       "speed: 2.0, " +
       "reluctance: 1.2, " +
+      "tunnelReluctance: 1.65, " +
       "boardCost: $660, " +
       "parking: VehicleParkingPreferences{cost: $30}, " +
       "rental: VehicleRentalPreferences{pickupTime: 30s}, " +

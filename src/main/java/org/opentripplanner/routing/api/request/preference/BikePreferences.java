@@ -26,6 +26,7 @@ public final class BikePreferences implements Serializable {
 
   private final double speed;
   private final double reluctance;
+  private final double tunnelReluctance;
   private final Cost boardCost;
   private final VehicleParkingPreferences parking;
   private final VehicleRentalPreferences rental;
@@ -36,6 +37,7 @@ public final class BikePreferences implements Serializable {
   private BikePreferences() {
     this.speed = 5;
     this.reluctance = 2.0;
+    this.tunnelReluctance = 1.0;
     this.boardCost = Cost.costOfMinutes(10);
     this.parking = VehicleParkingPreferences.DEFAULT;
     this.rental = VehicleRentalPreferences.DEFAULT;
@@ -47,6 +49,7 @@ public final class BikePreferences implements Serializable {
   private BikePreferences(Builder builder) {
     this.speed = Units.speed(builder.speed);
     this.reluctance = Units.reluctance(builder.reluctance);
+    this.tunnelReluctance = Units.reluctance(builder.tunnelReluctance);
     this.boardCost = builder.boardCost;
     this.parking = builder.parking;
     this.rental = builder.rental;
@@ -72,6 +75,15 @@ public final class BikePreferences implements Serializable {
 
   public double reluctance() {
     return reluctance;
+  }
+
+  /**
+   * A multiplier for walking through tunneled areas in routing. The higher the
+   * value, the strong the aversion is to going through tunnels. By default, this
+   * value is 1.0, having no effect on routing.
+   */
+  public double tunnnelReluctance() {
+    return tunnelReluctance;
   }
 
   /**
@@ -117,6 +129,7 @@ public final class BikePreferences implements Serializable {
     return (
       doubleEquals(that.speed, speed) &&
       doubleEquals(that.reluctance, reluctance) &&
+      doubleEquals(that.tunnelReluctance, tunnelReluctance) &&
       boardCost.equals(that.boardCost) &&
       Objects.equals(parking, that.parking) &&
       Objects.equals(rental, that.rental) &&
@@ -131,6 +144,7 @@ public final class BikePreferences implements Serializable {
     return Objects.hash(
       speed,
       reluctance,
+      tunnelReluctance,
       boardCost,
       parking,
       rental,
@@ -146,6 +160,7 @@ public final class BikePreferences implements Serializable {
       .of(BikePreferences.class)
       .addNum("speed", speed, DEFAULT.speed)
       .addNum("reluctance", reluctance, DEFAULT.reluctance)
+      .addNum("tunnelReluctance", tunnelReluctance, DEFAULT.tunnelReluctance)
       .addObj("boardCost", boardCost, DEFAULT.boardCost)
       .addObj("parking", parking, DEFAULT.parking)
       .addObj("rental", rental, DEFAULT.rental)
@@ -161,6 +176,7 @@ public final class BikePreferences implements Serializable {
     private final BikePreferences original;
     private double speed;
     private double reluctance;
+    private double tunnelReluctance;
     private Cost boardCost;
     private VehicleParkingPreferences parking;
     private VehicleRentalPreferences rental;
@@ -172,6 +188,7 @@ public final class BikePreferences implements Serializable {
       this.original = original;
       this.speed = original.speed;
       this.reluctance = original.reluctance;
+      this.tunnelReluctance = original.tunnelReluctance;
       this.boardCost = original.boardCost;
       this.parking = original.parking;
       this.rental = original.rental;
@@ -199,6 +216,15 @@ public final class BikePreferences implements Serializable {
 
     public Builder withReluctance(double reluctance) {
       this.reluctance = reluctance;
+      return this;
+    }
+
+    public double tunnelReluctance() {
+      return tunnelReluctance;
+    }
+
+    public Builder withTunnelReluctance(double tunnelReluctance) {
+      this.tunnelReluctance = tunnelReluctance;
       return this;
     }
 
