@@ -613,6 +613,30 @@ your users receive a timely response. You can also limit the max duration. There
           )
           .asDouble(dft.reluctance())
       )
+      .withTunnelReluctance(
+        c
+          .of("tunnelReluctance")
+          .since(V2_5)
+          .summary(
+            "A multiplier for driving through tunneled areas in routing. The higher the value, the strong the aversion is to going through tunnels. By default, this value is 1.0, having no effect on routing."
+          )
+          .asDouble(dft.tunnelReluctance())
+      )
+      .withDropoffTime(
+        c
+          .of("carDropoffTime")
+          .since(V2_0)
+          .summary(
+            "Time to park a car in a park and ride, w/o taking into account driving and walking cost."
+          )
+          .asInt(dft.dropoffTime())
+      )
+      .withParkCost(
+        c.of("carParkCost").since(V2_1).summary("Cost of parking a car.").asInt(dft.parkCost())
+      )
+      .withParkTime(
+        c.of("carParkTime").since(V2_1).summary("Time to park a car").asInt(dft.parkTime())
+      )
       .withPickupCost(
         c
           .of("pickupCost")
