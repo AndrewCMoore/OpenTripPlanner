@@ -11,6 +11,7 @@ class ScooterPreferencesTest {
 
   public static final double SPEED = 2.0;
   public static final double RELUCTANCE = 1.2;
+  private static final double TUNNEL_RELUCTANCE = 2.3;
   public static final TimeSlopeSafetyTriangle TRIANGLE = TimeSlopeSafetyTriangle
     .of()
     .withSlope(1)
@@ -23,6 +24,7 @@ class ScooterPreferencesTest {
     .of()
     .withSpeed(SPEED)
     .withReluctance(RELUCTANCE)
+    .withTunnelReluctance(TUNNEL_RELUCTANCE)
     .withOptimizeType(OPTIMIZE_TYPE)
     .withRental(rental -> rental.withPickupTime(RENTAL_PICKUP_TIME).build())
     .withOptimizeTriangle(it -> it.withSlope(1).build())
@@ -36,6 +38,11 @@ class ScooterPreferencesTest {
   @Test
   void reluctance() {
     assertEquals(RELUCTANCE, subject.reluctance());
+  }
+
+  @Test
+  void tunnelReluctance() {
+    assertEquals(TUNNEL_RELUCTANCE, subject.tunnelReluctance());
   }
 
   @Test
@@ -76,6 +83,7 @@ class ScooterPreferencesTest {
       "ScooterPreferences{" +
       "speed: 2.0, " +
       "reluctance: 1.2, " +
+      "tunnelReluctance: 2.3, " +
       "rental: VehicleRentalPreferences{pickupTime: 30s}, " +
       "optimizeType: TRIANGLE, " +
       "optimizeTriangle: TimeSlopeSafetyTriangle[time=0.0, slope=1.0, safety=0.0]" +

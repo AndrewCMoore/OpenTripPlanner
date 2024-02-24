@@ -23,6 +23,8 @@ public class ScooterPreferencesMapper {
       }
     );
 
+    callWith.argument("tunnelReluctance", scooter::withTunnelReluctance);
+
     if (scooter.optimizeType() == VehicleRoutingOptimizeType.TRIANGLE) {
       scooter.withOptimizeTriangle(triangle -> {
         callWith.argument("triangleFactors.time", triangle::withTime);

@@ -8,6 +8,7 @@ import static org.opentripplanner.routing.core.VehicleRoutingOptimizeType.TRIANG
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Consumer;
+
 import org.opentripplanner.framework.model.Units;
 import org.opentripplanner.framework.tostring.ToStringBuilder;
 import org.opentripplanner.routing.core.VehicleRoutingOptimizeType;
@@ -27,6 +28,7 @@ public final class ScooterPreferences implements Serializable {
 
   private final double speed;
   private final double reluctance;
+  private final double tunnelReluctance;
   private final VehicleRentalPreferences rental;
   private final VehicleRoutingOptimizeType optimizeType;
   private final TimeSlopeSafetyTriangle optimizeTriangle;
@@ -34,6 +36,7 @@ public final class ScooterPreferences implements Serializable {
   private ScooterPreferences() {
     this.speed = 5;
     this.reluctance = 2.0;
+    this.tunnelReluctance = 1.0;
     this.rental = VehicleRentalPreferences.DEFAULT;
     this.optimizeType = SAFE_STREETS;
     this.optimizeTriangle = TimeSlopeSafetyTriangle.DEFAULT;
@@ -42,6 +45,7 @@ public final class ScooterPreferences implements Serializable {
   private ScooterPreferences(Builder builder) {
     this.speed = Units.speed(builder.speed);
     this.reluctance = Units.reluctance(builder.reluctance);
+    this.tunnelReluctance = Units.reluctance(builder.tunnelReluctance);
     this.rental = builder.rental;
     this.optimizeType = Objects.requireNonNull(builder.optimizeType);
     this.optimizeTriangle = Objects.requireNonNull(builder.optimizeTriangle);
@@ -64,6 +68,15 @@ public final class ScooterPreferences implements Serializable {
 
   public double reluctance() {
     return reluctance;
+  }
+
+  /**
+   * A multiplier for walking through tunneled areas in routing. The higher the
+   * value, the strong the aversion is to going through tunnels. By default, this
+   * value is 1.0, having no effect on routing.
+   */
+  public double tunnelReluctance() {
+    return tunnelReluctance;
   }
 
   /** Rental preferences that can be different per request */
@@ -90,6 +103,7 @@ public final class ScooterPreferences implements Serializable {
     return (
       doubleEquals(that.speed, speed) &&
       doubleEquals(that.reluctance, reluctance) &&
+      doubleEquals(that.tunnelReluctance, tunnelReluctance) &&
       Objects.equals(rental, that.rental) &&
       optimizeType == that.optimizeType &&
       optimizeTriangle.equals(that.optimizeTriangle)
@@ -98,7 +112,7 @@ public final class ScooterPreferences implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(speed, reluctance, rental, optimizeType, optimizeTriangle);
+    return Objects.hash(speed, reluctance, tunnelReluctance, rental, optimizeType, optimizeTriangle);
   }
 
   @Override
@@ -107,6 +121,7 @@ public final class ScooterPreferences implements Serializable {
       .of(ScooterPreferences.class)
       .addNum("speed", speed, DEFAULT.speed)
       .addNum("reluctance", reluctance, DEFAULT.reluctance)
+      .addNum("tunnelReluctance", tunnelReluctance, DEFAULT.tunnelReluctance)
       .addObj("rental", rental, DEFAULT.rental)
       .addEnum("optimizeType", optimizeType, DEFAULT.optimizeType)
       .addObj("optimizeTriangle", optimizeTriangle, DEFAULT.optimizeTriangle)
@@ -119,6 +134,7 @@ public final class ScooterPreferences implements Serializable {
     private final ScooterPreferences original;
     private double speed;
     private double reluctance;
+    private double tunnelReluctance;
     private VehicleRentalPreferences rental;
     private VehicleRoutingOptimizeType optimizeType;
     private TimeSlopeSafetyTriangle optimizeTriangle;
@@ -127,6 +143,7 @@ public final class ScooterPreferences implements Serializable {
       this.original = original;
       this.speed = original.speed;
       this.reluctance = original.reluctance;
+      this.tunnelReluctance = original.tunnelReluctance;
       this.rental = original.rental;
       this.optimizeType = original.optimizeType;
       this.optimizeTriangle = original.optimizeTriangle;
@@ -151,6 +168,15 @@ public final class ScooterPreferences implements Serializable {
 
     public Builder withReluctance(double reluctance) {
       this.reluctance = reluctance;
+      return this;
+    }
+    
+    public double tunnelReluctance() {
+      return tunnelReluctance;
+    }
+
+    public Builder withTunnelReluctance(double tunnelReluctance) {
+      this.tunnelReluctance = tunnelReluctance;
       return this;
     }
 

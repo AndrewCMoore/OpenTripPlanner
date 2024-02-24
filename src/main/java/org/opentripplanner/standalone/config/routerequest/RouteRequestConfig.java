@@ -691,6 +691,15 @@ your users receive a timely response. You can also limit the max duration. There
           )
           .asDouble(dft.reluctance())
       )
+      .withTunnelReluctance(
+          c
+            .of("tunnelReluctance")
+            .since(V2_5)
+            .summary(
+              "A multiplier for driving through tunneled areas in routing. The higher the value, the strong the aversion is to going through tunnels. By default, this value is 1.0, having no effect on routing."
+            )
+            .asDouble(dft.tunnelReluctance())
+        )
       .withOptimizeType(
         c
           .of("optimization")

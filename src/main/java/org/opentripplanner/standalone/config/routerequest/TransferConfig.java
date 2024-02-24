@@ -2,6 +2,7 @@ package org.opentripplanner.standalone.config.routerequest;
 
 import static org.opentripplanner.standalone.config.framework.json.OtpVersion.V2_0;
 import static org.opentripplanner.standalone.config.framework.json.OtpVersion.V2_1;
+import static org.opentripplanner.standalone.config.framework.json.OtpVersion.V2_5;
 
 import org.opentripplanner.routing.api.request.preference.TransferOptimizationPreferences;
 import org.opentripplanner.routing.api.request.preference.TransferPreferences;
@@ -48,6 +49,15 @@ class TransferConfig {
           )
           .asInt(dft.slack())
       )
+      .withTunnelReluctance(
+          c
+            .of("tunnelReluctance")
+            .since(V2_5)
+            .summary(
+              "A multiplier for driving through tunneled areas in routing. The higher the value, the strong the aversion is to going through tunnels. By default, this value is 1.0, having no effect on routing."
+            )
+            .asDouble(dft.tunnelReluctance())
+        )
       .withWaitReluctance(
         c
           .of("waitReluctance")
