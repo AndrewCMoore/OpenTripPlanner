@@ -13,10 +13,8 @@ import org.opentripplanner.framework.model.Units;
 import org.opentripplanner.framework.tostring.ToStringBuilder;
 
 /**
- * The car preferences contain all speed, reluctance, cost and factor
- * preferences for driving
- * related to street routing. The values are normalized(rounded) so the class
- * can used as a cache
+ * The car preferences contain all speed, reluctance, cost and factor preferences for driving
+ * related to street routing. The values are normalized(rounded) so the class can used as a cache
  * key.
  * <p>
  * THIS CLASS IS IMMUTABLE AND THREAD-SAFE.
@@ -71,8 +69,7 @@ public final class CarPreferences implements Serializable {
   /**
    * Max car speed along streets, in meters per second.
    * <p>
-   * Default: 40 m/s, 144 km/h, above the maximum (finite) driving speed limit
-   * worldwide.
+   * Default: 40 m/s, 144 km/h, above the maximum (finite) driving speed limit worldwide.
    */
   public double speed() {
     return speed;
@@ -129,12 +126,11 @@ public final class CarPreferences implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     CarPreferences that = (CarPreferences) o;
-    return (DoubleUtils.doubleEquals(that.speed, speed) &&
+    return (
+      DoubleUtils.doubleEquals(that.speed, speed) &&
         DoubleUtils.doubleEquals(that.reluctance, reluctance) &&
         DoubleUtils.doubleEquals(that.tunnelReluctance, tunnelReluctance) &&
         parking.equals(that.parking) &&
@@ -142,7 +138,8 @@ public final class CarPreferences implements Serializable {
         Objects.equals(pickupTime, that.pickupTime) &&
         pickupCost.equals(that.pickupCost) &&
         DoubleUtils.doubleEquals(that.accelerationSpeed, accelerationSpeed) &&
-        DoubleUtils.doubleEquals(that.decelerationSpeed, decelerationSpeed));
+        DoubleUtils.doubleEquals(that.decelerationSpeed, decelerationSpeed)
+    );
   }
 
   @Override
@@ -156,7 +153,8 @@ public final class CarPreferences implements Serializable {
         pickupTime,
         pickupCost,
         accelerationSpeed,
-        decelerationSpeed);
+        decelerationSpeed
+    );
   }
 
   @Override

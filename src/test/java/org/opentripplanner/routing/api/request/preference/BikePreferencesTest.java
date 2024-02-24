@@ -12,13 +12,7 @@ class BikePreferencesTest {
   private static final double SPEED = 2.0;
   private static final double RELUCTANCE = 1.2;
   private static final double TUNNEL_RELUCTANCE = 1.65;
-  private static final double WALKING_SPEED = 1.15;
   private static final int BOARD_COST = 660;
-  private static final double WALKING_RELUCTANCE = 1.45;
-  private static final int SWITCH_TIME = 200;
-  private static final int SWITCH_COST = 450;
-  private static final int PARK_TIME = 330;
-  private static final int PARK_COST = 950;
   private static final TimeSlopeSafetyTriangle TRIANGLE = TimeSlopeSafetyTriangle
     .of()
     .withSlope(1)
