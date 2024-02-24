@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-
 import org.opentripplanner.framework.model.Cost;
 import org.opentripplanner.framework.model.Units;
 import org.opentripplanner.framework.tostring.ToStringBuilder;

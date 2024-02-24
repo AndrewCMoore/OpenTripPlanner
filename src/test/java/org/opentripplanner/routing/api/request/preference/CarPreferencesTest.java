@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.opentripplanner.routing.api.request.preference.ImmutablePreferencesAsserts.assertEqualsAndHashCode;
 
 import java.time.Duration;
-
 import org.junit.jupiter.api.Test;
 import org.opentripplanner.framework.model.Cost;
 
@@ -25,17 +24,17 @@ class CarPreferencesTest {
   public static final int PARK_COST = 30;
 
   private final CarPreferences subject = CarPreferences
-      .of()
-      .withSpeed(SPEED)
-      .withReluctance(RELUCTANCE)
-      .withTunnelReluctance(TUNNEL_RELUCTANCE)
-      .withPickupTime(Duration.ofSeconds(PICKUP_TIME))
-      .withPickupCost(PICKUP_COST)
-      .withAccelerationSpeed(ACCELERATION_SPEED)
-      .withDecelerationSpeed(DECELERATION_SPEED)
-      .withRental(rental -> rental.withPickupTime(RENTAL_PICKUP_TIME).build())
-      .withParking(parking -> parking.withCost(PARK_COST).build())
-      .build();
+    .of()
+    .withSpeed(SPEED)
+    .withReluctance(RELUCTANCE)
+    .withTunnelReluctance(TUNNEL_RELUCTANCE)
+    .withPickupTime(Duration.ofSeconds(PICKUP_TIME))
+    .withPickupCost(PICKUP_COST)
+    .withAccelerationSpeed(ACCELERATION_SPEED)
+    .withDecelerationSpeed(DECELERATION_SPEED)
+    .withRental(rental -> rental.withPickupTime(RENTAL_PICKUP_TIME).build())
+    .withParking(parking -> parking.withCost(PARK_COST).build())
+    .build();
 
   @Test
   void speed() {
@@ -90,8 +89,7 @@ class CarPreferencesTest {
     assertSame(CarPreferences.DEFAULT, CarPreferences.of().build());
     assertSame(subject, subject.copyOf().build());
 
-    // Create a copy, make a change and set it back again to force creating a new
-    // object
+    // Create a copy, make a change and set it back again to force creating a new object
     var other = subject.copyOf().withSpeed(0.0).build();
     var same = other.copyOf().withSpeed(SPEED).build();
     assertEqualsAndHashCode(subject, other, same);
@@ -101,16 +99,17 @@ class CarPreferencesTest {
   void testToString() {
     assertEquals("CarPreferences{}", CarPreferences.DEFAULT.toString());
     assertEquals(
-        "CarPreferences{" +
-            "speed: 20.0, " +
-            "reluctance: 5.1, " +
-            "tunnelReluctance: 2.3, " +
-            "parking: VehicleParkingPreferences{cost: $30}, " +
-            "rental: VehicleRentalPreferences{pickupTime: 30s}, " +
-            "pickupTime: PT10M, " +
-            "pickupCost: $500, " +
-            "accelerationSpeed: 3.1, decelerationSpeed: 3.5" +
-            "}",
-        subject.toString());
+      "CarPreferences{" +
+      "speed: 20.0, " +
+      "reluctance: 5.1, " +
+      "tunnelReluctance: 2.3, " +
+      "parking: VehicleParkingPreferences{cost: $30}, " +
+      "rental: VehicleRentalPreferences{pickupTime: 30s}, " +
+      "pickupTime: PT10M, " +
+      "pickupCost: $500, " +
+      "accelerationSpeed: 3.1, decelerationSpeed: 3.5" +
+      "}",
+      subject.toString()
+    );
   }
 }

@@ -16,7 +16,6 @@ import static org.opentripplanner.standalone.config.routerequest.WheelchairConfi
 
 import java.time.Duration;
 import java.util.stream.Collectors;
-
 import org.opentripplanner.api.parameter.QualifiedModeSet;
 import org.opentripplanner.framework.application.OTPFeature;
 import org.opentripplanner.framework.lang.StringUtils;

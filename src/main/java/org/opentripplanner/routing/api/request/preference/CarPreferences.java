@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.function.Consumer;
-
 import org.opentripplanner.framework.lang.DoubleUtils;
 import org.opentripplanner.framework.model.Cost;
 import org.opentripplanner.framework.model.Units;
@@ -131,46 +130,46 @@ public final class CarPreferences implements Serializable {
     CarPreferences that = (CarPreferences) o;
     return (
       DoubleUtils.doubleEquals(that.speed, speed) &&
-        DoubleUtils.doubleEquals(that.reluctance, reluctance) &&
-        DoubleUtils.doubleEquals(that.tunnelReluctance, tunnelReluctance) &&
-        parking.equals(that.parking) &&
-        rental.equals(that.rental) &&
-        Objects.equals(pickupTime, that.pickupTime) &&
-        pickupCost.equals(that.pickupCost) &&
-        DoubleUtils.doubleEquals(that.accelerationSpeed, accelerationSpeed) &&
-        DoubleUtils.doubleEquals(that.decelerationSpeed, decelerationSpeed)
+      DoubleUtils.doubleEquals(that.reluctance, reluctance) &&
+      DoubleUtils.doubleEquals(that.tunnelReluctance, tunnelReluctance) &&
+      parking.equals(that.parking) &&
+      rental.equals(that.rental) &&
+      Objects.equals(pickupTime, that.pickupTime) &&
+      pickupCost.equals(that.pickupCost) &&
+      DoubleUtils.doubleEquals(that.accelerationSpeed, accelerationSpeed) &&
+      DoubleUtils.doubleEquals(that.decelerationSpeed, decelerationSpeed)
     );
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        speed,
-        reluctance,
-        tunnelReluctance,
-        parking,
-        rental,
-        pickupTime,
-        pickupCost,
-        accelerationSpeed,
-        decelerationSpeed
+      speed,
+      reluctance,
+      tunnelReluctance,
+      parking,
+      rental,
+      pickupTime,
+      pickupCost,
+      accelerationSpeed,
+      decelerationSpeed
     );
   }
 
   @Override
   public String toString() {
     return ToStringBuilder
-        .of(CarPreferences.class)
-        .addNum("speed", speed, DEFAULT.speed)
-        .addNum("reluctance", reluctance, DEFAULT.reluctance)
-        .addNum("tunnelReluctance", tunnelReluctance, DEFAULT.tunnelReluctance)
-        .addObj("parking", parking, DEFAULT.parking)
-        .addObj("rental", rental, DEFAULT.rental)
-        .addObj("pickupTime", pickupTime, DEFAULT.pickupTime)
-        .addObj("pickupCost", pickupCost, DEFAULT.pickupCost)
-        .addNum("accelerationSpeed", accelerationSpeed, DEFAULT.accelerationSpeed)
-        .addNum("decelerationSpeed", decelerationSpeed, DEFAULT.decelerationSpeed)
-        .toString();
+      .of(CarPreferences.class)
+      .addNum("speed", speed, DEFAULT.speed)
+      .addNum("reluctance", reluctance, DEFAULT.reluctance)
+      .addNum("tunnelReluctance", tunnelReluctance, DEFAULT.tunnelReluctance)
+      .addObj("parking", parking, DEFAULT.parking)
+      .addObj("rental", rental, DEFAULT.rental)
+      .addObj("pickupTime", pickupTime, DEFAULT.pickupTime)
+      .addObj("pickupCost", pickupCost, DEFAULT.pickupCost)
+      .addNum("accelerationSpeed", accelerationSpeed, DEFAULT.accelerationSpeed)
+      .addNum("decelerationSpeed", decelerationSpeed, DEFAULT.decelerationSpeed)
+      .toString();
   }
 
   @SuppressWarnings("UnusedReturnValue")
