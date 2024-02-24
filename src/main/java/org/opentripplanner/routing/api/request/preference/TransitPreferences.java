@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+
 import org.opentripplanner.framework.model.Cost;
 import org.opentripplanner.framework.model.Units;
 import org.opentripplanner.framework.tostring.ToStringBuilder;
@@ -188,6 +189,7 @@ public final class TransitPreferences implements Serializable {
       boardSlack.equals(that.boardSlack) &&
       alightSlack.equals(that.alightSlack) &&
       reluctanceForMode.equals(that.reluctanceForMode) &&
+      Objects.equals(otherThanPreferredRoutesPenalty, that.otherThanPreferredRoutesPenalty) &&
       doubleEquals(that.tunnelReluctance, tunnelReluctance) &&
       unpreferredCost.equals(that.unpreferredCost) &&
       Objects.equals(relaxTransitGroupPriority, that.relaxTransitGroupPriority) &&
