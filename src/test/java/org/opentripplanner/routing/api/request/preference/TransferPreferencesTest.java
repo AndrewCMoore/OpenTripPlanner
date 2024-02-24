@@ -10,6 +10,7 @@ class TransferPreferencesTest {
 
   private static final int COST = 200;
   private static final int SLACK = 150;
+  private static final double TUNNEL_RELUCTANCE = 1.65;
   private static final double WAIT_RELUCTANCE = 0.95;
   private static final int MAX_TRANSFERS = 17;
   private static final int MAX_ADDITIONAL_TRANSFERS = 7;
@@ -22,6 +23,7 @@ class TransferPreferencesTest {
     .of()
     .withCost(COST)
     .withSlack(SLACK)
+    .withTunnelReluctance(TUNNEL_RELUCTANCE)
     .withWaitReluctance(WAIT_RELUCTANCE)
     .withMaxTransfers(MAX_TRANSFERS)
     .withMaxAdditionalTransfers(MAX_ADDITIONAL_TRANSFERS)
@@ -37,6 +39,11 @@ class TransferPreferencesTest {
   @Test
   void slack() {
     assertEquals(SLACK, subject.slack());
+  }
+
+  @Test
+  void tunnelReluctance() {
+    assertEquals(TUNNEL_RELUCTANCE, subject.tunnelReluctance());
   }
 
   @Test
@@ -83,6 +90,7 @@ class TransferPreferencesTest {
       "TransferPreferences{" +
       "cost: $200, " +
       "slack: 150, " +
+      "tunnelReluctance: 1.65, " +
       "waitReluctance: 0.95, " +
       "maxTransfers: 17, " +
       "maxAdditionalTransfers: 7, " +

@@ -24,6 +24,7 @@ public final class TransferPreferences implements Serializable {
 
   private final Cost cost;
   private final int slack;
+  private final double tunnelReluctance;
   private final double waitReluctance;
   private final int maxTransfers;
   private final int maxAdditionalTransfers;
@@ -33,6 +34,7 @@ public final class TransferPreferences implements Serializable {
   private TransferPreferences() {
     this.cost = Cost.ZERO;
     this.slack = 120;
+    this.tunnelReluctance = 1.0;
     this.waitReluctance = 1.0;
     this.maxTransfers = 12;
     this.maxAdditionalTransfers = 5;
@@ -43,6 +45,7 @@ public final class TransferPreferences implements Serializable {
   private TransferPreferences(Builder builder) {
     this.cost = builder.cost;
     this.slack = Units.duration(builder.slack);
+    this.tunnelReluctance = Units.reluctance(builder.tunnelReluctance);
     this.waitReluctance = Units.reluctance(builder.waitReluctance);
     this.maxTransfers = Units.count(builder.maxTransfers, MAX_NUMBER_OF_TRANSFERS);
     this.maxAdditionalTransfers =
@@ -91,6 +94,15 @@ public final class TransferPreferences implements Serializable {
    */
   public int slack() {
     return slack;
+  }
+
+  /**
+   * A multiplier for walking through tunneled areas in routing. The higher the
+   * value, the strong the aversion is to going through tunnels. By default, this
+   * value is 1.0, having no effect on routing.
+   */
+  public double tunnelReluctance() {
+    return tunnelReluctance;
   }
 
   /**
@@ -145,6 +157,7 @@ public final class TransferPreferences implements Serializable {
    * old functionality the same way, but we will try to map this parameter
    * so it does work similar as before.
    */
+  @Deprecated
   public int nonpreferredCost() {
     return nonpreferredCost.toSeconds();
   }
@@ -157,6 +170,7 @@ public final class TransferPreferences implements Serializable {
     return (
       cost.equals(that.cost) &&
       slack == that.slack &&
+      doubleEquals(that.tunnelReluctance, tunnelReluctance) &&
       doubleEquals(that.waitReluctance, waitReluctance) &&
       maxTransfers == that.maxTransfers &&
       maxAdditionalTransfers == that.maxAdditionalTransfers &&
@@ -170,6 +184,7 @@ public final class TransferPreferences implements Serializable {
     return Objects.hash(
       cost,
       slack,
+      tunnelReluctance,
       waitReluctance,
       maxTransfers,
       maxAdditionalTransfers,
@@ -184,6 +199,7 @@ public final class TransferPreferences implements Serializable {
       .of(TransferPreferences.class)
       .addObj("cost", cost, DEFAULT.cost)
       .addNum("slack", slack, DEFAULT.slack)
+      .addNum("tunnelReluctance", tunnelReluctance, DEFAULT.tunnelReluctance)
       .addNum("waitReluctance", waitReluctance, DEFAULT.waitReluctance)
       .addNum("maxTransfers", maxTransfers, DEFAULT.maxTransfers)
       .addNum("maxAdditionalTransfers", maxAdditionalTransfers, DEFAULT.maxAdditionalTransfers)
@@ -199,6 +215,7 @@ public final class TransferPreferences implements Serializable {
     private int slack;
     private Integer maxTransfers;
     private Integer maxAdditionalTransfers;
+    private double tunnelReluctance;
     private double waitReluctance;
     private TransferOptimizationParameters optimization;
     private Cost nonpreferredCost;
@@ -209,6 +226,7 @@ public final class TransferPreferences implements Serializable {
       this.slack = original.slack;
       this.maxTransfers = original.maxTransfers;
       this.maxAdditionalTransfers = original.maxAdditionalTransfers;
+      this.tunnelReluctance = original.tunnelReluctance;
       this.waitReluctance = original.waitReluctance;
       this.optimization = original.optimization;
       this.nonpreferredCost = original.nonpreferredCost;
@@ -230,6 +248,11 @@ public final class TransferPreferences implements Serializable {
 
     public Builder withNonpreferredCost(int nonpreferredCost) {
       this.nonpreferredCost = Cost.costOfSeconds(nonpreferredCost);
+      return this;
+    }
+
+    public Builder withTunnelReluctance(double tunnelReluctance) {
+      this.tunnelReluctance = tunnelReluctance;
       return this;
     }
 
